@@ -4,12 +4,15 @@ import CNJokeItem from "../CNJokeItem/CNJokeItem.jsx";
 class CNJokesList extends Component {
   state = {
     CNJokesList: [],
-    CNJokesFav: []
+    CNJokesFav: [],
+    toggleFav: true
   };
 
   constructor() {
     super();
+    this.CNJokesList = [];
     this.favJokes = [];
+    this.interval = null;
   }
 
   componentDidMount() {
@@ -23,12 +26,17 @@ class CNJokesList extends Component {
     return (
       <div className="container">
         <div className="row">
-          <div className="col-12">
+          <div className="col-6">
             <button
               className="btn btn-outline-primary mr-sm-2 mb-sm-3"
               onClick={() => this.fetchJokes()}
             >
               Get Jokes
+            </button>
+          </div>
+          <div className="col-6">
+            <button className="btn btn-secondary" onClick={this.handleToggle}>
+              Toggle Jokes
             </button>
           </div>
         </div>
@@ -47,12 +55,14 @@ class CNJokesList extends Component {
   }
 
   fetchJokes = () => {
-    this.getJokes();
+    this.getResponse(
+      "CNJokesList",
+      "http://api.icndb.com/jokes/random/10"
+    ).then(response => this.setState({ CNJokesList: response.data.value }));
   };
 
-  getJokes = async () => {
-    const response = await axios.get(" http://api.icndb.com/jokes/random/10");
-    this.setState({ CNJokesList: response.data.value });
+  getResponse = async (property, url) => {
+    return await axios.get(url);
   };
 
   getCNItems() {
@@ -102,6 +112,21 @@ class CNJokesList extends Component {
     }
     localStorage.setItem("favourites", JSON.stringify(this.favJokes));
     this.setState({ CNJokesFav: this.favJokes });
+  };
+
+  handleToggle = () => {
+    console.log(this.state.toggleFav);
+    this.setState({ toggleFav: !this.state.toggleFav });
+    if (this.state.toggleFav) {
+      this.interval = setInterval(() => {
+        this.getResponse(
+          "CNJokesFav",
+          "http://api.icndb.com/jokes/random/1"
+        ).then(response => this.handleFavourites(response.data.value[0]));
+      }, 5000);
+    } else {
+      clearInterval(this.interval);
+    }
   };
 }
 
