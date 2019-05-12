@@ -13,13 +13,20 @@ class App extends Component {
     usernameValue: "",
     pwdValue: ""
   };
+
+  componentDidMount() {
+    if (JSON.parse(sessionStorage.getItem("showLogin")) !== null) {
+      const showLogin = JSON.parse(localStorage.getItem("showLogin"));
+      this.setState({ showLoggedIn: showLogin });
+    }
+  }
   render() {
     return (
       <div className="App">
         <Header
           showLogin={this.state.showLoggedIn}
           onLogin={() => {
-            this.setState({ showModal: true });
+            this.setState({ showModal: true, usernameValue: "", pwdValue: "" });
           }}
           onLogout={this.handleLogout}
         />
@@ -71,25 +78,25 @@ class App extends Component {
   };
 
   handleLogout = () => {
-    console.log("logout ");
+    sessionStorage.setItem("showLogin", JSON.stringify(true));
+    this.setState({ showLoggedIn: true });
   };
 
   handleSubmit = () => {
-    console.log("hello submit");
-
-    console.log(this.state.pwdValue, this.state.usernameValue);
     const userVal = this.state.usernameValue;
     const pwdStr = this.state.pwdValue;
     let errorFlag = false;
     console.log(pwdStr);
     if (
-      this.isValid(pwdStr) &&
+      this.checkLowerCaseWithException(pwdStr) &&
       pwdStr.length >= 3 &&
       userVal !== "" &&
-      this.isIncreasingSequence(pwdStr)
+      this.checkRecurring(pwdStr)
     ) {
       //if (this.isIncreasingSequence(pwdStr)) {
       //ToDO: session Storage..
+      sessionStorage.setItem("showLogin", JSON.stringify(false));
+      this.setState({ showLoggedIn: false });
       this.setState({ showModal: false });
       //}
     } else {
@@ -97,11 +104,42 @@ class App extends Component {
     }
     this.setState({ showError: errorFlag });
   };
-  isValid = str => {
-    return !/^(?:(\w)\1+)+$/.test(str) && /^[a-z][^il0-9A-Z]+$/.test(str);
+
+  checkLowerCaseWithException = str => {
+    return /^[a-z][^ilo]+$/.test(str);
   };
 
-  getAlphaArray = (charA, charZ, exceptVal) => {
+  checkRecurring = str => {
+    const letterBase = "abcdefghijklmnopqrstuvwxyz";
+    const normalBase = "0123456789abcdefghijklmnop";
+    const bigCheck = /012|123|234|345|456|567|678|789|89a|9ab|abc|bcd|cde|def|efg|fgh|ghi|hij|ijk|jkl|klm|lmn|mno|nop/;
+    const mediumCheck = /(.)\1.*?(.)\2/;
+    //const smallCheck = /[8ad]/;
+
+    let pwdNum = parseInt(
+      str.replace(/./g, ch => normalBase[letterBase.indexOf(ch)]),
+      26
+    );
+    let newPwd = pwdNum.toString(26);
+
+    // while (
+    //   !bigCheck.test(newPwd) ||
+    //   smallCheck.test(newPwd) ||
+    //   !mediumCheck.test(newPwd)
+    // ) {
+    //   newPwd = pwdNum.toString(26);
+    //   pwdNum++;
+    // }
+    console.log(newPwd);
+    console.log(!bigCheck.test(newPwd));
+    // console.log(smallCheck.test(newPwd));
+    console.log(!mediumCheck.test(newPwd));
+
+    return !bigCheck.test(newPwd) && !mediumCheck.test(newPwd);
+  };
+  // Using functions..
+
+  /*getAlphaArray = (charA, charZ, exceptVal) => {
     var a = [],
       i = charA.charCodeAt(0),
       j = charZ.charCodeAt(0);
@@ -130,22 +168,10 @@ class App extends Component {
       }
     }
     return sequenceFlag;
-  };
-  checkSequence = pwdStr => {
-    let pwdArr = pwdStr.split("");
-    let sequenceFlag = false;
-    for (let i = 0; i < pwdStr.length - 2; i++) {
-      if (
-        pwdArr[i].charCodeAt(0) - 96 === pwdArr[i + 1].charCodeAt(0) - 97 &&
-        pwdArr[i + 1].charCodeAt(0) - 96 === pwdArr[i + 2].charCodeAt(0) - 97
-      ) {
-        sequenceFlag = true;
-      }
-    }
-    return sequenceFlag;
-  };
+  };*/
 
   handleChange = event => {
+    // TODO: Can be optimized to handle all fileds..
     if (event.target.id === "username") {
       this.setState({ usernameValue: event.target.value });
     } else if (event.target.id === "pwd") {

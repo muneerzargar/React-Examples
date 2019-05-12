@@ -50,7 +50,9 @@ const Modal = props => {
 
 const getErrorText = errorFlag => {
   return errorFlag ? (
-    <div style={errorStyle}>please fill all details correctly !</div>
+    <div className="mb-2" style={errorStyle}>
+      please fill all details correctly !
+    </div>
   ) : null;
 };
 
