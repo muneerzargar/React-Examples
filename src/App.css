@@ -1,0 +1,31 @@
+.padding-20 {
+  padding: 20px 0 !important;
+}
+
+.mt-8 {
+  margin-top: 8rem;
+}
+
+.mb-4 {
+  margin-bottom: 4rem;
+}
+
+.jokes,
+.favourites {
+  padding-right: 0 !important;
+  padding-bottom: 8rem;
+}
+.jokes ul,
+.favourites ul {
+  border-left: 1px solid #dddddd;
+  border-right: 1px solid #dddddd;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.jokes ul li,
+.favourites ul li {
+  padding: 20px 0 20px 10px;
+  border-bottom: 1px solid #dddddd;
+}
