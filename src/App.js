@@ -47,7 +47,6 @@ class App extends Component {
                 <input
                   type="password"
                   className="form-control"
-                  minLength="3"
                   maxLength="32"
                   value={this.state.pwdValue}
                   id="pwd"
