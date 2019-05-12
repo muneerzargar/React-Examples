@@ -78,12 +78,71 @@ class App extends Component {
     console.log("hello submit");
 
     console.log(this.state.pwdValue, this.state.usernameValue);
+    const userVal = this.state.usernameValue;
     const pwdStr = this.state.pwdValue;
-    const pattern = new RegExp(/^[a-z][^il]+$/);
-    if (pattern.test(pwdStr) === true) {
-      console.log("2 tests passed ");
+    let errorFlag = false;
+    console.log(pwdStr);
+    if (
+      this.isValid(pwdStr) &&
+      pwdStr.length >= 3 &&
+      userVal !== "" &&
+      this.isIncreasingSequence(pwdStr)
+    ) {
+      //if (this.isIncreasingSequence(pwdStr)) {
+      //ToDO: session Storage..
       this.setState({ showModal: false });
+      //}
+    } else {
+      errorFlag = true;
     }
+    this.setState({ showError: errorFlag });
+  };
+  isValid = str => {
+    return !/^(?:(\w)\1+)+$/.test(str) && /^[a-z][^il0-9A-Z]+$/.test(str);
+  };
+
+  getAlphaArray = (charA, charZ, exceptVal) => {
+    var a = [],
+      i = charA.charCodeAt(0),
+      j = charZ.charCodeAt(0);
+    for (; i <= j; ++i) {
+      if (!exceptVal.includes(String.fromCharCode(i))) {
+        a.push(String.fromCharCode(i));
+      }
+    }
+    return a;
+  };
+
+  isIncreasingSequence = value => {
+    const valArr = value.split("");
+    const validAlphaArray = this.getAlphaArray("a", "z", ["i", "o", "l"]);
+    let sequenceFlag = false;
+    if (value.match(/[iol]/) === null) {
+      for (let i = 0; i < valArr.length - 2; i++) {
+        if (
+          valArr[i + 1] ===
+            validAlphaArray[validAlphaArray.indexOf(valArr[i]) + 1] &&
+          valArr[i + 2] ===
+            validAlphaArray[validAlphaArray.indexOf(valArr[i]) + 2]
+        ) {
+          sequenceFlag = true;
+        }
+      }
+    }
+    return sequenceFlag;
+  };
+  checkSequence = pwdStr => {
+    let pwdArr = pwdStr.split("");
+    let sequenceFlag = false;
+    for (let i = 0; i < pwdStr.length - 2; i++) {
+      if (
+        pwdArr[i].charCodeAt(0) - 96 === pwdArr[i + 1].charCodeAt(0) - 97 &&
+        pwdArr[i + 1].charCodeAt(0) - 96 === pwdArr[i + 2].charCodeAt(0) - 97
+      ) {
+        sequenceFlag = true;
+      }
+    }
+    return sequenceFlag;
   };
 
   handleChange = event => {

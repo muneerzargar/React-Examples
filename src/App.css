@@ -10,6 +10,10 @@
   margin-bottom: 4rem;
 }
 
+.mb-2 {
+  margin-bottom: 2rem;
+}
+
 .jokes,
 .favourites {
   padding-right: 0 !important;
