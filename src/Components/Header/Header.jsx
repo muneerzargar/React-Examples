@@ -4,7 +4,7 @@ const Header = props => {
   return (
     <nav className="navbar fixed-top navbar-dark bg-dark padding-20 flex-column flex-md-row bd-navbar">
       <div className="container">
-        <a className="navbar-brand" href="#">
+        <a className="navbar-brand" href="#/">
           CN-Jokes
         </a>
         <div>{getAppBtn(props)}</div>
