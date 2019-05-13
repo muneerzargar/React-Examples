@@ -31,7 +31,7 @@ const Modal = props => {
   }
   return (
     <div className="backdrop" style={backdropStyle}>
-      <div className="modal" style={modalStyle}>
+      <div style={modalStyle}>
         {props.children}
         {getErrorText(props.error)}
 

@@ -15,7 +15,7 @@ class App extends Component {
 
   componentDidMount() {
     if (JSON.parse(sessionStorage.getItem("showLogin")) !== null) {
-      const showLogin = JSON.parse(localStorage.getItem("showLogin"));
+      const showLogin = JSON.parse(sessionStorage.getItem("showLogin"));
       this.setState({ showLoggedIn: showLogin });
     }
   }
