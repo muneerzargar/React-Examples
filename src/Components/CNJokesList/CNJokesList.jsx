@@ -10,7 +10,6 @@ class CNJokesList extends Component {
 
   constructor() {
     super();
-    this.CNJokesList = [];
     this.favJokes = [];
     this.interval = null;
   }
