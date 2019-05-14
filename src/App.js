@@ -85,15 +85,13 @@ class App extends Component {
   };
 
   handleSubmit = () => {
-    const userVal = this.state.user.name;
-    const pwdStr = this.state.user.pwd;
+    const { name, pwd } = this.state.user;
     let errorFlag = false;
-    console.log(pwdStr);
     if (
-      this.checkLowerCaseWithException(pwdStr) &&
-      pwdStr.length >= 3 &&
-      userVal !== "" &&
-      this.isIncreasingSequence(pwdStr)
+      this.checkLowerCaseWithException(pwd) &&
+      pwd.length >= 5 &&
+      name !== "" &&
+      this.isIncreasingSequence(pwd)
     ) {
       sessionStorage.setItem("showLogin", JSON.stringify(false));
       this.setState({ showLoggedIn: false });

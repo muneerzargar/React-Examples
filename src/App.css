@@ -29,3 +29,29 @@
   padding: 20px 0 20px 10px;
   border-bottom: 1px solid #dddddd;
 }
+
+.login-modal-backdrop {
+  position: fixed;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 50px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+}
+
+.login-modal-content {
+  background-color: #fff;
+  border-radius: 5px;
+  max-width: 300px;
+  max-height: 300px;
+  margin: 10rem auto;
+  display: block;
+  padding: 30px;
+}
+
+.footer-content {
+  font-size: 15px;
+  color: #fff;
+}
